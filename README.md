@@ -197,14 +197,45 @@ Kashf-Page/
 - **TypeScript** - Type-safe code for better development experience
 - **Fast Performance** - Optimized with Vite for lightning-fast builds
 
+## 🔒 Security
+
+Security is a top priority for this project. We follow best practices to keep the codebase and user data secure.
+
+### For Users
+- Never commit `.env` files or API keys
+- Keep your dependencies updated
+- Report security issues privately (see SECURITY.md)
+
+### For Contributors
+Please read our [Security Policy](SECURITY.md) before contributing. Key points:
+- Never commit sensitive information
+- Use `.env.example` as a template
+- Run `npm audit` before submitting PRs
+- Follow secure coding practices
+
+**Found a security vulnerability?** Please report it privately - see [SECURITY.md](SECURITY.md) for details.
+
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+We welcome contributions from the community! Whether it's fixing bugs, adding features, or improving documentation, your help is appreciated.
+
+### Quick Start for Contributors
+
+1. Read our [Contributing Guidelines](CONTRIBUTING.md)
+2. Check out [open issues](https://github.com/yourusername/Kashf-Page/issues)
+3. Fork the repository
+4. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+5. Make your changes following our [coding standards](CONTRIBUTING.md#coding-standards)
+6. Test your changes thoroughly
+7. Commit your changes with a [clear message](CONTRIBUTING.md#commit-guidelines)
+8. Push to your branch (`git push origin feature/AmazingFeature`)
+9. Open a Pull Request
+
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
+- Code style and standards
+- Commit message format
+- Pull request process
+- Development workflow
 
 ## 📄 License
 
