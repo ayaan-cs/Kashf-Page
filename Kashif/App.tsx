@@ -13,7 +13,6 @@ import { FloatingMapPin, MapRoute, MapGrid, LocationDots, InteractiveMapSection 
 import { TealGeometricPattern, TealMandala, TealFrame, TealCornerOrnament, TealDivider, FloatingTealAccent } from './components/TealPatterns';
 import { GoldMandala, GoldCornerOrnament, FloatingGoldAccent } from './components/TealPatterns';
 import { AppStoreBadges } from './components/AppStoreBadges';
-import { StatsSection } from './components/StatsSection';
 import { FeatureHighlights } from './components/FeatureHighlights';
 import { siteConfig } from './config';
 
@@ -116,7 +115,7 @@ export default function App() {
           
           {/* Hero Subtitle */}
           <motion.p
-            className="text-[18px] md:text-[18px] sm:text-[16px] leading-[1.7] text-[#B0B0B0] max-w-[600px] mx-auto mb-12"
+            className="text-[18px] md:text-[18px] sm:text-[16px] leading-[1.7] text-[#B0B0B0] max-w-[600px] mx-auto"
             style={{ fontWeight: 400 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -124,15 +123,6 @@ export default function App() {
           >
             Finding mosques, halal food & Muslim-owned businesses made effortless
           </motion.p>
-
-          {/* App Store Badges */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <AppStoreBadges showComingSoon={true} />
-          </motion.div>
         </div>
         
         {/* Scroll Indicator */}
@@ -180,9 +170,6 @@ export default function App() {
           </motion.p>
         </div>
       </section>
-
-      {/* STATS SECTION - Social Proof */}
-      <StatsSection />
 
       {/* FEATURE HIGHLIGHTS - Quick Overview */}
       <FeatureHighlights />
