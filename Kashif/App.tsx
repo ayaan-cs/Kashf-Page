@@ -81,7 +81,7 @@ export default function App() {
         <div className="text-center max-w-[900px] relative z-10">
           {/* Logo */}
           <motion.img
-            src="/logo.svg"
+            src="/kashf_logo.jpg"
             alt="Kashf Logo"
             className="w-[400px] md:w-[400px] sm:w-[280px] h-auto mx-auto mb-16"
             initial={{ opacity: 0, y: 20 }}
