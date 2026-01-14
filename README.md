@@ -1,0 +1,206 @@
+# Kashf Landing Page
+
+**Discover Muslim essentials in a few clicks**
+
+A beautiful, modern landing page for Kashf - an app helping Muslims find mosques, halal food, and Muslim-owned businesses effortlessly.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+Make sure you have the following installed:
+- [Node.js](https://nodejs.org/) (version 18 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd Kashf-Page
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+   or
+   ```bash
+   yarn install
+   ```
+
+3. **Configure your contact information** (see Configuration section below)
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+   or
+   ```bash
+   yarn dev
+   ```
+
+5. **Open your browser**
+
+   The site will automatically open at `http://localhost:3000`
+
+## ⚙️ Configuration
+
+### Update Contact Information & Links
+
+All contact information, social links, and external URLs are managed in a single file for easy updates:
+
+**Edit `Kashif/config.ts`**
+
+```typescript
+export const siteConfig = {
+  // Email Configuration
+  email: {
+    contact: 'your-email@example.com',    // Update with your email
+    support: 'support@example.com',        // Update with your support email
+  },
+
+  // Social Media Links
+  social: {
+    github: 'https://github.com/yourusername',       // Update with your GitHub URL
+    instagram: 'https://instagram.com/yourusername', // Update with your Instagram URL
+    // Add more social links as needed
+    twitter: '',
+    facebook: '',
+    linkedin: '',
+  },
+
+  // Buy Me a Coffee
+  buyMeACoffee: 'https://www.buymeacoffee.com/yourusername', // Update with your Buy Me a Coffee URL
+
+  // Footer Links
+  links: {
+    home: '#',
+    features: '#features',
+    contact: '#contact',
+    privacy: '#privacy',
+  },
+};
+```
+
+### What Gets Updated
+
+When you edit `Kashif/config.ts`, the following elements on your site will automatically update:
+
+- **Email Links**: Contact email in the footer
+- **Social Links**: GitHub and Instagram buttons in the CTA section
+- **Buy Me a Coffee**: The coffee button in the CTA section
+- **Footer Links**: All navigation links in the footer
+- **Copyright Year**: Automatically updates to current year
+
+## 📦 Building for Production
+
+To create a production-optimized build:
+
+```bash
+npm run build
+```
+or
+```bash
+yarn build
+```
+
+The optimized files will be in the `dist` folder, ready to deploy to any static hosting service.
+
+### Preview Production Build
+
+To preview your production build locally:
+
+```bash
+npm run preview
+```
+or
+```bash
+yarn preview
+```
+
+## 🎨 Project Structure
+
+```
+Kashf-Page/
+├── Kashif/                    # Source code directory
+│   ├── App.tsx               # Main application component
+│   ├── main.tsx              # Application entry point
+│   ├── config.ts             # ⭐ Configuration file (UPDATE THIS!)
+│   ├── components/           # React components
+│   │   ├── ui/              # UI components
+│   │   ├── CategoryButton.tsx
+│   │   ├── EmailInput.tsx
+│   │   ├── IslamicPattern.tsx
+│   │   ├── PhoneMockup.tsx
+│   │   └── ...
+│   ├── styles/
+│   │   └── globals.css      # Global styles
+│   └── guidelines/
+│       └── Guidelines.md    # Design guidelines
+├── index.html               # HTML entry point
+├── package.json            # Project dependencies
+├── tsconfig.json          # TypeScript configuration
+├── vite.config.ts         # Vite configuration
+├── tailwind.config.js    # Tailwind CSS configuration
+└── README.md            # This file
+
+```
+
+## 🛠️ Technologies Used
+
+- **React** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **Motion (Framer Motion)** - Animation library
+- **Lucide React** - Icon library
+
+## 📝 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
+
+## 🎯 Features
+
+- **Responsive Design** - Works beautifully on all devices
+- **Smooth Animations** - Engaging scroll animations using Framer Motion
+- **Islamic Design Elements** - Beautiful teal and gold Islamic patterns
+- **Easy Configuration** - Update all links and emails from one file
+- **TypeScript** - Type-safe code for better development experience
+- **Fast Performance** - Optimized with Vite for lightning-fast builds
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 💖 Support
+
+If you find this project helpful, please consider:
+- ⭐ Starring the repository
+- 🐛 Reporting bugs
+- 💡 Suggesting new features
+- ☕ [Buying us a coffee](https://www.buymeacoffee.com/yourusername)
+
+## 🌟 Acknowledgments
+
+Built with love for the Muslim community. May Allah (SWT) accept this work.
+
+جَزَاكَ ٱللَّٰهُ خَيْرًا
+
+---
+
+Made with ❤️ by the Kashf Team
