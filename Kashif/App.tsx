@@ -12,7 +12,6 @@ import { IslamicFrame } from './components/IslamicFrame';
 import { FloatingMapPin, MapRoute, MapGrid, LocationDots, InteractiveMapSection } from './components/MapElements';
 import { TealGeometricPattern, TealMandala, TealFrame, TealCornerOrnament, TealDivider, FloatingTealAccent } from './components/TealPatterns';
 import { GoldMandala, GoldCornerOrnament, FloatingGoldAccent } from './components/TealPatterns';
-import kashfLogo from 'figma:asset/1358ab4925ff72f9c5a9ccc4cf44b9b7859e5695.png';
 import { siteConfig } from './config';
 
 export default function App() {
@@ -81,8 +80,8 @@ export default function App() {
         
         <div className="text-center max-w-[900px] relative z-10">
           {/* Logo */}
-          <motion.img 
-            src={kashfLogo} 
+          <motion.img
+            src="/logo.svg"
             alt="Kashf Logo"
             className="w-[400px] md:w-[400px] sm:w-[280px] h-auto mx-auto mb-16"
             initial={{ opacity: 0, y: 20 }}

@@ -1,0 +1,11 @@
+<svg width="400" height="120" viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple elegant text-based logo -->
+  <text x="200" y="75" font-family="Inter, sans-serif" font-size="64" font-weight="300" fill="#FFFFFF" text-anchor="middle" letter-spacing="-2">
+    Kashf
+  </text>
+  <!-- Subtle underline accent in teal -->
+  <line x1="120" y1="85" x2="280" y2="85" stroke="#14B8A6" stroke-width="1.5" opacity="0.6"/>
+  <!-- Small decorative dots -->
+  <circle cx="110" cy="85" r="2" fill="#14B8A6" opacity="0.6"/>
+  <circle cx="290" cy="85" r="2" fill="#14B8A6" opacity="0.6"/>
+</svg>

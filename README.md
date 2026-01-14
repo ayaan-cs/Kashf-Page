@@ -46,6 +46,29 @@ Make sure you have the following installed:
 
 ## ⚙️ Configuration
 
+### Add Your Custom Logo
+
+The site uses a placeholder logo by default. To add your own logo:
+
+1. **Replace the logo file**
+   - Add your logo image to the `public/` directory
+   - Supported formats: PNG, SVG, JPG (SVG recommended for best quality)
+   - Recommended size: 400px width for best display
+
+2. **Update the logo reference** (optional)
+   - If you named your logo something other than `logo.svg`
+   - Open `Kashif/App.tsx`
+   - Find line 84: `src="/logo.svg"`
+   - Change it to match your filename: `src="/your-logo.png"`
+
+**Example:**
+```bash
+# Add your logo to the public directory
+cp /path/to/your-logo.png public/logo.png
+
+# Update App.tsx if needed to reference the new filename
+```
+
 ### Update Contact Information & Links
 
 All contact information, social links, and external URLs are managed in a single file for easy updates:
