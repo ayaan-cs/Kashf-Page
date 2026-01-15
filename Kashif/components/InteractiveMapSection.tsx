@@ -308,29 +308,14 @@ export function InteractiveMapSection() {
         ))}
       </motion.div>
 
-      {/* Map Container with Teal & Gold Accents */}
+      {/* Map Container */}
       <motion.div
-        className="map-container w-full h-[700px] relative border-4 rounded-lg overflow-hidden"
+        className="map-container w-full h-[700px] relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.4 }}
-        style={{
-          borderImage: 'linear-gradient(135deg, #14B8A6 0%, #D4AF37 50%, #14B8A6 100%) 1',
-          boxShadow: '0 0 40px rgba(20, 184, 166, 0.4), 0 0 80px rgba(212, 175, 55, 0.2), inset 0 0 100px rgba(0,0,0,0.5)'
-        }}
       >
-        {/* Results Counter Overlay with Gold Accent */}
-        <div className="absolute top-4 left-4 z-[1000] bg-[#1A1A1A] border-2 rounded-lg px-4 py-2 backdrop-blur-sm"
-             style={{
-               borderColor: '#D4AF37',
-               boxShadow: '0 0 20px rgba(212, 175, 55, 0.3)'
-             }}>
-          <p className="text-sm text-white">
-            Found <span className="font-bold text-[#14B8A6]">{filteredLocations.length}</span> {selectedCategory === 'All' ? 'locations' : selectedCategory.toLowerCase()} within 10 miles
-          </p>
-        </div>
-
         {/* Leaflet Map */}
         <MapContainer
           center={mapCenter}
@@ -404,13 +389,20 @@ export function InteractiveMapSection() {
                   userSelect: isResizing ? 'none' : 'auto'
                 }}
               >
-                {/* Resize Handle */}
+                {/* Resize Handle - Drag to resize panel */}
                 <div
-                  className="absolute left-0 top-0 h-full w-1 cursor-ew-resize hover:bg-[#14B8A6] transition-colors z-[2002] group"
+                  className="absolute left-0 top-0 h-full w-3 cursor-ew-resize z-[2002] group bg-gradient-to-r from-[#14B8A6]/20 to-transparent hover:from-[#14B8A6]/40"
                   onMouseDown={handleResizeStart}
+                  style={{
+                    boxShadow: 'inset 2px 0 4px rgba(20, 184, 166, 0.3)'
+                  }}
                 >
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-12 -ml-2 flex items-center justify-center">
-                    <div className="w-1 h-8 bg-[#333333] rounded-full group-hover:bg-[#14B8A6] transition-colors"></div>
+                  <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                    <div className="flex flex-col gap-1">
+                      <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
+                      <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
+                      <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
+                    </div>
                   </div>
                 </div>
               {/* Header with Image */}
