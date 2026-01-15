@@ -14,6 +14,8 @@ L.Icon.Default.mergeOptions({
 });
 
 // Real location data for Round Rock / North Austin area
+// TO ADD YOUR OWN PHOTOS: Replace the 'image' field with your actual image URLs
+// Example: image: '/images/icga-masjid.jpg' or 'https://yourdomain.com/photos/icga.jpg'
 const locations = [
   {
     id: 1,
@@ -23,7 +25,7 @@ const locations = [
     address: '11900 Mustang Ave, Austin, TX 78759',
     phone: '(512) 476-2563',
     coords: [30.4083, -97.7503] as [number, number],
-    image: 'https://placehold.co/600x400/1A1A1A/10B981/png?text=ICGA+Masjid',
+    image: 'https://placehold.co/600x400/1A1A1A/10B981/png?text=ICGA+Masjid', // REPLACE THIS WITH YOUR PHOTO URL
     rating: 4.6,
     priceRange: '',
     description: 'One of the oldest and most prominent mosques in the area. Located in East Austin, it serves as a central hub for the city\'s Muslim community.',
@@ -256,8 +258,8 @@ export function InteractiveMapSection() {
             onClick={() => setSelectedCategory(category.name)}
             className={`flex items-center gap-3 px-6 py-3 rounded-full border-2 transition-all duration-300 ${
               selectedCategory === category.name
-                ? 'bg-[#14B8A6] border-[#14B8A6] text-white'
-                : 'bg-[#1A1A1A] border-[#333333] text-[#999999] hover:border-[#14B8A6]'
+                ? 'bg-[#14B8A6] border-[#14B8A6] text-white shadow-[0_0_20px_rgba(20,184,166,0.4)]'
+                : 'bg-[#1A1A1A] border-[#333333] text-[#999999] hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)]'
             }`}
           >
             <span className="text-2xl">{category.icon}</span>
@@ -266,19 +268,24 @@ export function InteractiveMapSection() {
         ))}
       </motion.div>
 
-      {/* Map Container */}
+      {/* Map Container with Teal & Gold Accents */}
       <motion.div
-        className="w-full h-[700px] relative"
+        className="w-full h-[700px] relative border-4 rounded-lg overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.4 }}
         style={{
-          boxShadow: 'inset 0 0 100px rgba(0,0,0,0.5)'
+          borderImage: 'linear-gradient(135deg, #14B8A6 0%, #D4AF37 50%, #14B8A6 100%) 1',
+          boxShadow: '0 0 40px rgba(20, 184, 166, 0.4), 0 0 80px rgba(212, 175, 55, 0.2), inset 0 0 100px rgba(0,0,0,0.5)'
         }}
       >
-        {/* Results Counter Overlay */}
-        <div className="absolute top-4 left-4 z-[1000] bg-[#1A1A1A] border border-[#333333] rounded-lg px-4 py-2 backdrop-blur-sm">
+        {/* Results Counter Overlay with Gold Accent */}
+        <div className="absolute top-4 left-4 z-[1000] bg-[#1A1A1A] border-2 rounded-lg px-4 py-2 backdrop-blur-sm"
+             style={{
+               borderColor: '#D4AF37',
+               boxShadow: '0 0 20px rgba(212, 175, 55, 0.3)'
+             }}>
           <p className="text-sm text-white">
             Found <span className="font-bold text-[#14B8A6]">{filteredLocations.length}</span> {selectedCategory === 'All' ? 'locations' : selectedCategory.toLowerCase()} within 10 miles
           </p>
@@ -329,29 +336,32 @@ export function InteractiveMapSection() {
             );
           })}
         </MapContainer>
-      </motion.div>
 
-      {/* Detail Panel */}
-      <AnimatePresence>
-        {selectedLocation && (
-          <>
-            {/* Overlay */}
-            <motion.div
-              className="fixed inset-0 bg-black/70 z-[2000]"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={closeDetailPanel}
-            />
+        {/* Detail Panel - Positioned inside map */}
+        <AnimatePresence>
+          {selectedLocation && (
+            <>
+              {/* Overlay */}
+              <motion.div
+                className="absolute inset-0 bg-black/70 z-[2000]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={closeDetailPanel}
+              />
 
-            {/* Panel */}
-            <motion.div
-              className="fixed right-0 top-0 h-full w-full md:w-[480px] bg-[#1A1A1A] border-l border-[#333333] z-[2001] overflow-y-auto"
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            >
+              {/* Panel */}
+              <motion.div
+                className="absolute right-0 top-0 h-full w-full md:w-[420px] bg-[#1A1A1A] border-l-4 z-[2001] overflow-y-auto"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                style={{
+                  borderLeftColor: '#14B8A6',
+                  boxShadow: '-4px 0 20px rgba(20, 184, 166, 0.3)'
+                }}
+              >
               {/* Header with Image */}
               <div className="relative h-[300px] bg-[#0A0A0A]">
                 <img
@@ -375,7 +385,8 @@ export function InteractiveMapSection() {
                     </button>
                   </div>
                 </div>
-                <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-white text-sm">
+                <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm border border-[#D4AF37] px-3 py-1 rounded-full text-white text-sm"
+                     style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.3)' }}>
                   1 / 5 Photos
                 </div>
               </div>
@@ -444,20 +455,12 @@ export function InteractiveMapSection() {
                     </div>
                   </div>
                 </div>
-
-                {/* Information */}
-                <div className="border-t border-[#333333] mt-6 pt-6">
-                  <h4 className="text-xl font-bold text-white mb-4">Information</h4>
-                  <div className="space-y-2 text-[#999999] text-sm">
-                    <p>📅 Added: {selectedLocation.added}</p>
-                    <p>🔄 Updated: {selectedLocation.updated}</p>
-                  </div>
-                </div>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+      </motion.div>
 
       {/* Leaflet CSS Override for Dark Theme */}
       <style>{`
