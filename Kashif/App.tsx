@@ -9,7 +9,8 @@ import { EmailInput } from './components/EmailInput';
 import { IslamicPattern, IslamicCornerOrnament } from './components/IslamicPattern';
 import { IslamicDivider } from './components/IslamicDivider';
 import { IslamicFrame } from './components/IslamicFrame';
-import { FloatingMapPin, MapRoute, MapGrid, LocationDots, InteractiveMapSection } from './components/MapElements';
+import { FloatingMapPin, MapRoute, MapGrid, LocationDots } from './components/MapElements';
+import { InteractiveMapSection } from './components/InteractiveMapSection';
 import { TealGeometricPattern, TealMandala, TealFrame, TealCornerOrnament, TealDivider, FloatingTealAccent } from './components/TealPatterns';
 import { GoldMandala, GoldCornerOrnament, FloatingGoldAccent } from './components/TealPatterns';
 import { AppStoreBadges } from './components/AppStoreBadges';
@@ -427,27 +428,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* INTERACTIVE MAP VISUALIZATION SECTION */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#161719] relative overflow-hidden">
-        <MapRoute />
-        
-        <div className="max-w-[1400px] w-full relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-          >
-            <InteractiveMapSection />
-          </motion.div>
-          
-          {/* Floating Map Pins around the section */}
-          <FloatingMapPin delay={0.2} className="absolute top-[10%] left-[5%] hidden md:block" />
-          <FloatingMapPin delay={0.4} className="absolute top-[15%] right-[8%] hidden md:block" />
-          <FloatingMapPin delay={0.6} className="absolute bottom-[20%] left-[10%] hidden md:block" />
-          <FloatingMapPin delay={0.8} className="absolute bottom-[15%] right-[12%] hidden md:block" />
-        </div>
-      </section>
+      {/* INTERACTIVE MAP SECTION - Explore Your Community */}
+      <InteractiveMapSection />
 
       {/* SECTION 8: CTA */}
       <section className="min-h-[80vh] flex items-center justify-center px-8 py-32 bg-[#0A0A0A] relative">
