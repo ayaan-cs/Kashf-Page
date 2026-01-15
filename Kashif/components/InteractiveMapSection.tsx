@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { motion, AnimatePresence } from 'motion/react';
 import { Navigation, Phone, Star, X, Heart, Share2, ExternalLink } from 'lucide-react';
@@ -200,6 +200,8 @@ const createCustomIcon = (color: string, icon: string) => {
 export function InteractiveMapSection() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [panelWidth, setPanelWidth] = useState(420);
+  const [isResizing, setIsResizing] = useState(false);
 
   const filteredLocations = selectedCategory === 'All'
     ? locations
@@ -211,7 +213,45 @@ export function InteractiveMapSection() {
 
   const closeDetailPanel = () => {
     setSelectedLocation(null);
+    setPanelWidth(420); // Reset to default width
   };
+
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  const handleResize = (e: MouseEvent) => {
+    if (!isResizing) return;
+
+    const mapContainer = document.querySelector('.map-container');
+    if (!mapContainer) return;
+
+    const mapRect = mapContainer.getBoundingClientRect();
+    const newWidth = mapRect.right - e.clientX;
+
+    // Constrain between 320px (min) and full map width (max)
+    const constrainedWidth = Math.max(320, Math.min(newWidth, mapRect.width));
+    setPanelWidth(constrainedWidth);
+  };
+
+  const handleResizeEnd = () => {
+    setIsResizing(false);
+  };
+
+  // Add mouse event listeners for resize
+  useEffect(() => {
+    if (isResizing) {
+      document.body.classList.add('resizing');
+      window.addEventListener('mousemove', handleResize);
+      window.addEventListener('mouseup', handleResizeEnd);
+      return () => {
+        document.body.classList.remove('resizing');
+        window.removeEventListener('mousemove', handleResize);
+        window.removeEventListener('mouseup', handleResizeEnd);
+      };
+    }
+  }, [isResizing]);
 
   // Round Rock / North Austin bounds
   const mapCenter: [number, number] = [30.4583, -97.7089];
@@ -270,7 +310,7 @@ export function InteractiveMapSection() {
 
       {/* Map Container with Teal & Gold Accents */}
       <motion.div
-        className="w-full h-[700px] relative border-4 rounded-lg overflow-hidden"
+        className="map-container w-full h-[700px] relative border-4 rounded-lg overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -352,16 +392,27 @@ export function InteractiveMapSection() {
 
               {/* Panel */}
               <motion.div
-                className="absolute right-0 top-0 h-full w-full md:w-[420px] bg-[#1A1A1A] border-l-4 z-[2001] overflow-y-auto"
+                className="absolute right-0 top-0 h-full bg-[#1A1A1A] border-l-4 z-[2001] overflow-y-auto"
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
                 transition={{ type: 'spring', damping: 30, stiffness: 300 }}
                 style={{
+                  width: `${panelWidth}px`,
                   borderLeftColor: '#14B8A6',
-                  boxShadow: '-4px 0 20px rgba(20, 184, 166, 0.3)'
+                  boxShadow: '-4px 0 20px rgba(20, 184, 166, 0.3)',
+                  userSelect: isResizing ? 'none' : 'auto'
                 }}
               >
+                {/* Resize Handle */}
+                <div
+                  className="absolute left-0 top-0 h-full w-1 cursor-ew-resize hover:bg-[#14B8A6] transition-colors z-[2002] group"
+                  onMouseDown={handleResizeStart}
+                >
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-12 -ml-2 flex items-center justify-center">
+                    <div className="w-1 h-8 bg-[#333333] rounded-full group-hover:bg-[#14B8A6] transition-colors"></div>
+                  </div>
+                </div>
               {/* Header with Image */}
               <div className="relative h-[300px] bg-[#0A0A0A]">
                 <img
@@ -462,11 +513,40 @@ export function InteractiveMapSection() {
       </AnimatePresence>
       </motion.div>
 
-      {/* Leaflet CSS Override for Dark Theme */}
+      {/* Leaflet CSS Override for Dark Theme with Teal & Gold Map Colors */}
       <style>{`
         .leaflet-container {
           background: #0A0A0A !important;
         }
+
+        /* Teal & Gold Map Colorization */
+        .leaflet-tile-pane {
+          filter:
+            sepia(0.4)
+            hue-rotate(150deg)
+            saturate(2.5)
+            brightness(0.9)
+            contrast(1.2);
+        }
+
+        /* Add teal overlay for water emphasis */
+        .leaflet-tile-container::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(20, 184, 166, 0.15) 0%,
+            rgba(212, 175, 55, 0.1) 50%,
+            rgba(20, 184, 166, 0.15) 100%
+          );
+          pointer-events: none;
+          mix-blend-mode: overlay;
+        }
+
         .leaflet-popup-content-wrapper {
           background: #1A1A1A;
           color: #FFFFFF;
@@ -489,6 +569,12 @@ export function InteractiveMapSection() {
         }
         .leaflet-control-zoom a:hover {
           background: #333333 !important;
+        }
+
+        /* Resize cursor when dragging */
+        body.resizing {
+          cursor: ew-resize !important;
+          user-select: none !important;
         }
       `}</style>
     </section>
