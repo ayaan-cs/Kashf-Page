@@ -229,8 +229,14 @@ export function InteractiveMapSection() {
   const [panelWidth, setPanelWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
   const [shouldLoadMap, setShouldLoadMap] = useState(false);
+  const [mapClicked, setMapClicked] = useState(false);
   const mapRef = useRef<any>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  const handleMapClick = () => {
+    setMapClicked(true);
+    setShouldLoadMap(true);
+  };
 
   const filteredLocations = selectedCategory === 'All'
     ? locations
@@ -280,37 +286,7 @@ export function InteractiveMapSection() {
     }
   }, [isResizing]);
 
-  // Lazy load map when section is visible (Intersection Observer)
-  useEffect(() => {
-    const currentSection = sectionRef.current;
-
-    if (!currentSection) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-
-        if (entry.isIntersecting) {
-          console.log('Map section is visible - loading map...');
-          setShouldLoadMap(true);
-          observer.disconnect();
-        }
-      },
-      {
-        root: null, // viewport
-        rootMargin: '200px', // Start loading 200px before visible
-        threshold: 0 // Trigger as soon as any part is visible
-      }
-    );
-
-    observer.observe(currentSection);
-
-    return () => {
-      if (currentSection) {
-        observer.unobserve(currentSection);
-      }
-    };
-  }, []);
+  // No auto-loading - map loads only when user clicks
 
   // Enable 3D buildings when map loads
   useEffect(() => {
@@ -451,10 +427,13 @@ export function InteractiveMapSection() {
               background: '#0A0A0A'
             }}
           >
-            {/* Lazy Load: Only render Map when visible */}
-            {!shouldLoadMap ? (
-              /* Islamic-Themed Loading Placeholder */
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#0A0A0A] relative overflow-hidden">
+            {/* Click to Load Map */}
+            {!mapClicked ? (
+              /* Click-to-Activate Screen */
+              <div
+                onClick={handleMapClick}
+                className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#0A0A0A] relative overflow-hidden cursor-pointer group hover:bg-gradient-to-br hover:from-[#1A1A1A] hover:via-[#2A2A2A] hover:to-[#1A1A1A] transition-all duration-300"
+              >
                 {/* Decorative Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                   <div className="absolute top-0 left-0 w-32 h-32 border-2 border-[#D4AF37] rotate-45 transform -translate-x-16 -translate-y-16"></div>
@@ -512,17 +491,21 @@ export function InteractiveMapSection() {
                     </div>
                   </div>
 
-                  {/* Loading Text */}
-                  <div className="space-y-2">
-                    <p className="text-[#D4AF37] text-xl font-semibold tracking-wide">Loading Map...</p>
-                    <p className="text-[#666666] text-sm">Preparing your community discovery</p>
-                  </div>
+                  {/* Click to Explore Text */}
+                  <div className="space-y-4">
+                    <p className="text-[#D4AF37] text-2xl font-bold tracking-wide group-hover:scale-110 transition-transform">
+                      Click to Explore
+                    </p>
+                    <p className="text-[#999999] text-base">
+                      Discover mosques, halal food & businesses
+                    </p>
 
-                  {/* Loading Dots Animation */}
-                  <div className="flex justify-center gap-2 mt-4">
-                    <div className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
-                    <div className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    {/* Play Button Icon */}
+                    <div className="flex justify-center mt-6">
+                      <div className="w-16 h-16 rounded-full border-2 border-[#D4AF37] flex items-center justify-center group-hover:bg-[#D4AF37] transition-all duration-300">
+                        <div className="w-0 h-0 border-l-[16px] border-l-[#D4AF37] border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1 group-hover:border-l-[#0A0A0A]"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
