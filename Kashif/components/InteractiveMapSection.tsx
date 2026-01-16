@@ -448,12 +448,77 @@ export function InteractiveMapSection() {
           >
             {/* Lazy Load: Only render Map when visible */}
             {!shouldLoadMap ? (
-              /* Loading Placeholder */
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A0A0A] to-[#1A1A1A]">
-                <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 border-4 border-[#14B8A6] border-t-transparent rounded-full animate-spin"></div>
-                  <p className="text-[#14B8A6] text-lg font-semibold">Loading Interactive Map...</p>
-                  <p className="text-[#666666] text-sm mt-2">Preparing your community exploration</p>
+              /* Islamic-Themed Loading Placeholder */
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A0A0A] via-[#1A1A1A] to-[#0A0A0A] relative overflow-hidden">
+                {/* Decorative Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute top-0 left-0 w-32 h-32 border-2 border-[#D4AF37] rotate-45 transform -translate-x-16 -translate-y-16"></div>
+                  <div className="absolute bottom-0 right-0 w-32 h-32 border-2 border-[#D4AF37] rotate-45 transform translate-x-16 translate-y-16"></div>
+                  <div className="absolute top-1/2 left-1/2 w-64 h-64 border border-[#D4AF37] rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+                </div>
+
+                {/* Loader Content */}
+                <div className="text-center z-10">
+                  {/* Islamic Geometric Star Loader */}
+                  <div className="relative w-24 h-24 mx-auto mb-6">
+                    {/* Rotating outer star */}
+                    <div className="absolute inset-0 animate-spin" style={{ animationDuration: '3s' }}>
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
+                        <path
+                          d="M50 0 L57 43 L100 50 L57 57 L50 100 L43 57 L0 50 L43 43 Z"
+                          fill="none"
+                          stroke="#D4AF37"
+                          strokeWidth="2"
+                          opacity="0.6"
+                        />
+                      </svg>
+                    </div>
+
+                    {/* Counter-rotating inner star */}
+                    <div className="absolute inset-4 animate-spin" style={{ animationDuration: '2s', animationDirection: 'reverse' }}>
+                      <svg viewBox="0 0 100 100" className="w-full h-full">
+                        <path
+                          d="M50 10 L54 46 L90 50 L54 54 L50 90 L46 54 L10 50 L46 46 Z"
+                          fill="#D4AF37"
+                          opacity="0.8"
+                        />
+                      </svg>
+                    </div>
+
+                    {/* Crescent and Star in center */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg viewBox="0 0 50 50" className="w-10 h-10">
+                        {/* Crescent */}
+                        <path
+                          d="M25 5 A15 15 0 1 0 25 45 A12 12 0 1 1 25 5"
+                          fill="#D4AF37"
+                        />
+                        {/* Star */}
+                        <path
+                          d="M38 15 L39.5 19 L43.5 19 L40 21.5 L41.5 25.5 L38 23 L34.5 25.5 L36 21.5 L32.5 19 L36.5 19 Z"
+                          fill="#D4AF37"
+                        />
+                      </svg>
+                    </div>
+
+                    {/* Pulsing rings */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-full h-full border-2 border-[#D4AF37] rounded-full animate-ping" style={{ animationDuration: '2s' }}></div>
+                    </div>
+                  </div>
+
+                  {/* Loading Text */}
+                  <div className="space-y-2">
+                    <p className="text-[#D4AF37] text-xl font-semibold tracking-wide">Loading Map...</p>
+                    <p className="text-[#666666] text-sm">Preparing your community discovery</p>
+                  </div>
+
+                  {/* Loading Dots Animation */}
+                  <div className="flex justify-center gap-2 mt-4">
+                    <div className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+                    <div className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-[#D4AF37] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                  </div>
                 </div>
               </div>
             ) : (
