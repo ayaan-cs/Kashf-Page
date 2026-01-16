@@ -128,19 +128,6 @@ export function FeatureHighlights() {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <p className="text-[15px] text-[#666666] mb-6">
-            And many more features coming soon...
-          </p>
-          <motion.a
-            href="#cta"
-            className="inline-flex items-center gap-2 text-[14px] text-[#14B8A6] hover:text-white font-medium transition-colors duration-300"
-            whileHover={{ x: 5 }}
-          >
-            Join the beta
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </motion.a>
         </motion.div>
       </div>
     </section>
