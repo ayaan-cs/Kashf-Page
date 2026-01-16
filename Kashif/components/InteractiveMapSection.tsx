@@ -228,7 +228,9 @@ export function InteractiveMapSection() {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [panelWidth, setPanelWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
+  const [shouldLoadMap, setShouldLoadMap] = useState(false);
   const mapRef = useRef<any>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const filteredLocations = selectedCategory === 'All'
     ? locations
@@ -278,9 +280,36 @@ export function InteractiveMapSection() {
     }
   }, [isResizing]);
 
+  // Lazy load map when section is visible (Intersection Observer)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !shouldLoadMap) {
+            setShouldLoadMap(true);
+            // Once loaded, disconnect observer to prevent reloading
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: '100px', // Start loading 100px before section is visible
+        threshold: 0.1 // Trigger when 10% of section is visible
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [shouldLoadMap]);
+
   // Enable 3D buildings when map loads
   useEffect(() => {
-    if (mapRef.current) {
+    if (mapRef.current && shouldLoadMap) {
       const map = mapRef.current.getMap();
       map.on('load', () => {
         // Enable 3D buildings
@@ -326,10 +355,10 @@ export function InteractiveMapSection() {
         }
       });
     }
-  }, []);
+  }, [shouldLoadMap]);
 
   return (
-    <section className="min-h-screen relative bg-black py-16">
+    <section ref={sectionRef} className="min-h-screen relative bg-black py-16">
       {/* Section Header */}
       <div className="max-w-[1400px] mx-auto mb-8 px-8 text-center">
         <motion.h2
@@ -417,38 +446,50 @@ export function InteractiveMapSection() {
               background: '#0A0A0A'
             }}
           >
-            {/* Mapbox Map */}
-            <Map
-              ref={mapRef}
-              mapboxAccessToken={MAPBOX_TOKEN}
-              initialViewState={{
-                longitude: -97.7089,
-                latitude: 30.4583,
-                zoom: 11,
-                pitch: 0,
-                bearing: 0
-              }}
-              style={{ width: '100%', height: '100%' }}
-              mapStyle={MAPBOX_STYLE}
-              minZoom={10}
-              maxZoom={16}
-              maxBounds={[
-                [-97.85, 30.3], // Southwest
-                [-97.55, 30.6]  // Northeast
-              ]}
-            >
-              {/* Navigation Controls */}
-              <NavigationControl position="top-right" />
+            {/* Lazy Load: Only render Map when visible */}
+            {!shouldLoadMap ? (
+              /* Loading Placeholder */
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#0A0A0A] to-[#1A1A1A]">
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 border-4 border-[#14B8A6] border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-[#14B8A6] text-lg font-semibold">Loading Interactive Map...</p>
+                  <p className="text-[#666666] text-sm mt-2">Preparing your community exploration</p>
+                </div>
+              </div>
+            ) : (
+              /* Mapbox Map */
+              <Map
+                ref={mapRef}
+                mapboxAccessToken={MAPBOX_TOKEN}
+                initialViewState={{
+                  longitude: -97.7089,
+                  latitude: 30.4583,
+                  zoom: 11,
+                  pitch: 0,
+                  bearing: 0
+                }}
+                style={{ width: '100%', height: '100%' }}
+                mapStyle={MAPBOX_STYLE}
+                minZoom={10}
+                maxZoom={16}
+                maxBounds={[
+                  [-97.85, 30.3], // Southwest
+                  [-97.55, 30.6]  // Northeast
+                ]}
+              >
+                {/* Navigation Controls */}
+                <NavigationControl position="top-right" />
 
-              {/* Location Markers */}
-              {filteredLocations.map((location) => (
-                <CustomMarker
-                  key={location.id}
-                  location={location}
-                  onClick={() => handleLocationClick(location)}
-                />
-              ))}
-            </Map>
+                {/* Location Markers */}
+                {filteredLocations.map((location) => (
+                  <CustomMarker
+                    key={location.id}
+                    location={location}
+                    onClick={() => handleLocationClick(location)}
+                  />
+                ))}
+              </Map>
+            )}
 
             {/* Detail Panel */}
             <AnimatePresence>
