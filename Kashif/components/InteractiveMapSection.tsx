@@ -310,12 +310,47 @@ export function InteractiveMapSection() {
 
       {/* Map Container */}
       <motion.div
-        className="map-container w-full h-[700px] relative overflow-hidden"
+        className="max-w-[1200px] mx-auto px-8"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.4 }}
       >
+        {/* Tablet Mockup Frame */}
+        <div
+          className="relative mx-auto"
+          style={{
+            width: '100%',
+            maxWidth: '1100px',
+            aspectRatio: '16 / 10',
+            background: '#1A1A1A',
+            borderRadius: '32px',
+            padding: '16px',
+            boxShadow: '0px 30px 80px rgba(0,0,0,0.9), 0px 0px 0px 2px #333333, inset 0px 0px 0px 1px #2A2A2A'
+          }}
+        >
+          {/* Camera (small dot at top center) */}
+          <div
+            className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[8px] h-[8px] bg-[#0A0A0A] rounded-full z-10"
+            style={{
+              boxShadow: '0 0 0 2px #1A1A1A'
+            }}
+          />
+
+          {/* Decorative Corner Accents (Gold) */}
+          <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37] rounded-tl-lg opacity-30"></div>
+          <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-[#D4AF37] rounded-tr-lg opacity-30"></div>
+          <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37] rounded-bl-lg opacity-30"></div>
+          <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-[#D4AF37] rounded-br-lg opacity-30"></div>
+
+          {/* Screen Container with Map */}
+          <div
+            className="map-container w-full h-full overflow-hidden relative"
+            style={{
+              borderRadius: '24px',
+              background: '#0A0A0A'
+            }}
+          >
         {/* Leaflet Map */}
         <MapContainer
           center={mapCenter}
@@ -503,6 +538,10 @@ export function InteractiveMapSection() {
           </>
         )}
       </AnimatePresence>
+          </div>
+          {/* End Screen Container */}
+        </div>
+        {/* End Tablet Mockup Frame */}
       </motion.div>
 
       {/* Leaflet CSS Override for Dark Theme with Teal & Gold Map Colors */}
