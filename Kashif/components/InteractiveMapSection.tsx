@@ -282,30 +282,35 @@ export function InteractiveMapSection() {
 
   // Lazy load map when section is visible (Intersection Observer)
   useEffect(() => {
+    const currentSection = sectionRef.current;
+
+    if (!currentSection) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !shouldLoadMap) {
-            setShouldLoadMap(true);
-            // Once loaded, disconnect observer to prevent reloading
-            observer.disconnect();
-          }
-        });
+        const [entry] = entries;
+
+        if (entry.isIntersecting) {
+          console.log('Map section is visible - loading map...');
+          setShouldLoadMap(true);
+          observer.disconnect();
+        }
       },
       {
-        rootMargin: '100px', // Start loading 100px before section is visible
-        threshold: 0.1 // Trigger when 10% of section is visible
+        root: null, // viewport
+        rootMargin: '200px', // Start loading 200px before visible
+        threshold: 0 // Trigger as soon as any part is visible
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    observer.observe(currentSection);
 
     return () => {
-      observer.disconnect();
+      if (currentSection) {
+        observer.unobserve(currentSection);
+      }
     };
-  }, [shouldLoadMap]);
+  }, []);
 
   // Enable 3D buildings when map loads
   useEffect(() => {

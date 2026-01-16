@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Cairo', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Aref Ruqaa', 'Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
