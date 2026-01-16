@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Navigation, Phone, Star, X, Heart, Share2, ExternalLink } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-// Mapbox configuration
-const MAPBOX_TOKEN = 'pk.eyJ1IjoidGltYnVkNGwiLCJhIjoiY21lbXV0ZDczMHV5bTJqcTJrbW42dmtkdSJ9.oSF2SzGHETe1fRJi4gWcaw';
-const MAPBOX_STYLE = 'mapbox://styles/timbud4l/cmkga5dok000501s7butrh3fg';
+// Mapbox configuration from environment variables
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const MAPBOX_STYLE = import.meta.env.VITE_MAPBOX_STYLE_URL;
 
 // Real location data for Round Rock / North Austin area
 // TO ADD YOUR OWN PHOTOS: Replace the 'image' field with your actual image URLs
