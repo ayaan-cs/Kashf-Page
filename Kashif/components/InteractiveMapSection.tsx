@@ -1,17 +1,12 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useState, useEffect, useRef } from 'react';
+import Map, { Marker, NavigationControl } from 'react-map-gl';
 import { motion, AnimatePresence } from 'motion/react';
 import { Navigation, Phone, Star, X, Heart, Share2, ExternalLink } from 'lucide-react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-// Fix Leaflet default marker icons
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-});
+// Mapbox configuration
+const MAPBOX_TOKEN = 'pk.eyJ1IjoidGltYnVkNGwiLCJhIjoiY21lbXV0ZDczMHV5bTJqcTJrbW42dmtkdSJ9.oSF2SzGHETe1fRJi4gWcaw';
+const MAPBOX_STYLE = 'mapbox://styles/timbud4l/cmkga5dok000501s7butrh3fg';
 
 // Real location data for Round Rock / North Austin area
 // TO ADD YOUR OWN PHOTOS: Replace the 'image' field with your actual image URLs
@@ -24,8 +19,8 @@ const locations = [
     categoryColor: '#10B981',
     address: '11900 Mustang Ave, Austin, TX 78759',
     phone: '(512) 476-2563',
-    coords: [30.4083, -97.7503] as [number, number],
-    image: 'https://placehold.co/600x400/1A1A1A/10B981/png?text=ICGA+Masjid', // REPLACE THIS WITH YOUR PHOTO URL
+    coords: [-97.7503, 30.4083] as [number, number], // Mapbox uses [lng, lat]
+    image: 'https://placehold.co/600x400/1A1A1A/10B981/png?text=ICGA+Masjid',
     rating: 4.6,
     priceRange: '',
     description: 'One of the oldest and most prominent mosques in the area. Located in East Austin, it serves as a central hub for the city\'s Muslim community.',
@@ -39,7 +34,7 @@ const locations = [
     categoryColor: '#10B981',
     address: '12915 Hymeadow Dr, Austin, TX 78729',
     phone: '(512) 219-1700',
-    coords: [30.4456, -97.7689] as [number, number],
+    coords: [-97.7689, 30.4456] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/10B981/png?text=ICBC',
     rating: 4.9,
     priceRange: '',
@@ -54,7 +49,7 @@ const locations = [
     categoryColor: '#10B981',
     address: '1951 Hampton Ln, Round Rock, TX 78664',
     phone: '(512) 388-6222',
-    coords: [30.4983, -97.6789] as [number, number],
+    coords: [-97.6789, 30.4983] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/10B981/png?text=IC+Round+Rock',
     rating: 4.8,
     priceRange: '',
@@ -69,7 +64,7 @@ const locations = [
     categoryColor: '#EF4444',
     address: '201 University Oaks Blvd #790, Round Rock, TX 78665',
     phone: '(512) 716-4410',
-    coords: [30.4950, -97.6823] as [number, number],
+    coords: [-97.6823, 30.4950] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/EF4444/png?text=Urban+Bird',
     rating: 4.4,
     priceRange: '$10-20',
@@ -84,7 +79,7 @@ const locations = [
     categoryColor: '#EF4444',
     address: '11220 N Lamar Blvd, Austin, TX 78753',
     phone: '(512) 832-9976',
-    coords: [30.3789, -97.6927] as [number, number],
+    coords: [-97.6927, 30.3789] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/EF4444/png?text=Peace+Bakery',
     rating: 4.7,
     priceRange: '$10-20',
@@ -99,7 +94,7 @@ const locations = [
     categoryColor: '#EF4444',
     address: '3107 S I-35 Frontage Rd #775, Round Rock, TX 78664',
     phone: '(512) 640-6367',
-    coords: [30.4789, -97.6712] as [number, number],
+    coords: [-97.6712, 30.4789] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/EF4444/png?text=Halal+Bros',
     rating: 4.4,
     priceRange: '$10-20',
@@ -114,7 +109,7 @@ const locations = [
     categoryColor: '#8B5CF6',
     address: '7900 Elkhorn Mountain Trl, Austin, TX 78729',
     phone: '(512) 444-4222',
-    coords: [30.4523, -97.7912] as [number, number],
+    coords: [-97.7912, 30.4523] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/8B5CF6/png?text=Austin+Peace',
     rating: 4.9,
     priceRange: '',
@@ -129,7 +124,7 @@ const locations = [
     categoryColor: '#8B5CF6',
     address: '5415 Parkcrest Dr, Austin, TX 78731',
     phone: '(512) 220-8822',
-    coords: [30.3689, -97.7512] as [number, number],
+    coords: [-97.7512, 30.3689] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/8B5CF6/png?text=Renaissance',
     rating: 4.8,
     priceRange: '',
@@ -144,7 +139,7 @@ const locations = [
     categoryColor: '#F97316',
     address: '1310 E Old Settlers Blvd #102, Round Rock, TX 78664',
     phone: '(512) 244-4786',
-    coords: [30.5123, -97.6656] as [number, number],
+    coords: [-97.6656, 30.5123] as [number, number],
     image: 'https://placehold.co/600x400/1A1A1A/F97316/png?text=Indo+Pak',
     rating: 3.6,
     priceRange: '',
@@ -178,30 +173,62 @@ interface Location {
   updated: string;
 }
 
-// Custom marker icons
-const createCustomIcon = (color: string, icon: string) => {
-  return L.divIcon({
-    html: `
-      <div style="position: relative;">
-        <svg width="40" height="50" viewBox="0 0 40 50" style="filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));">
-          <path d="M20 0C8.954 0 0 8.954 0 20c0 15 20 30 20 30s20-15 20-30C40 8.954 31.046 0 20 0z" fill="${color}" opacity="0.9"/>
-          <circle cx="20" cy="18" r="12" fill="rgba(0,0,0,0.3)"/>
-          <text x="20" y="24" text-anchor="middle" font-size="16" fill="#fff">${icon}</text>
+// Custom marker component
+function CustomMarker({
+  location,
+  onClick
+}: {
+  location: Location;
+  onClick: () => void;
+}) {
+  const icon = location.category === 'Mosque' ? '🕌' :
+                location.category === 'Food' ? '🍽️' :
+                location.category === 'Education' ? '📚' : '🛒';
+
+  return (
+    <Marker
+      longitude={location.coords[0]}
+      latitude={location.coords[1]}
+      anchor="bottom"
+      onClick={(e) => {
+        e.originalEvent.stopPropagation();
+        onClick();
+      }}
+    >
+      <div
+        className="cursor-pointer transition-transform hover:scale-110"
+        style={{
+          filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.5))'
+        }}
+      >
+        <svg width="40" height="50" viewBox="0 0 40 50">
+          <path
+            d="M20 0C8.954 0 0 8.954 0 20c0 15 20 30 20 30s20-15 20-30C40 8.954 31.046 0 20 0z"
+            fill={location.categoryColor}
+            opacity="0.9"
+          />
+          <circle cx="20" cy="18" r="12" fill="rgba(0,0,0,0.3)" />
+          <text
+            x="20"
+            y="24"
+            textAnchor="middle"
+            fontSize="16"
+            fill="#fff"
+          >
+            {icon}
+          </text>
         </svg>
       </div>
-    `,
-    className: '',
-    iconSize: [40, 50],
-    iconAnchor: [20, 50],
-    popupAnchor: [0, -50]
-  });
-};
+    </Marker>
+  );
+}
 
 export function InteractiveMapSection() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [panelWidth, setPanelWidth] = useState(420);
   const [isResizing, setIsResizing] = useState(false);
+  const mapRef = useRef<any>(null);
 
   const filteredLocations = selectedCategory === 'All'
     ? locations
@@ -213,7 +240,7 @@ export function InteractiveMapSection() {
 
   const closeDetailPanel = () => {
     setSelectedLocation(null);
-    setPanelWidth(420); // Reset to default width
+    setPanelWidth(420);
   };
 
   const handleResizeStart = (e: React.MouseEvent) => {
@@ -230,7 +257,6 @@ export function InteractiveMapSection() {
     const mapRect = mapContainer.getBoundingClientRect();
     const newWidth = mapRect.right - e.clientX;
 
-    // Constrain between 320px (min) and full map width (max)
     const constrainedWidth = Math.max(320, Math.min(newWidth, mapRect.width));
     setPanelWidth(constrainedWidth);
   };
@@ -239,7 +265,6 @@ export function InteractiveMapSection() {
     setIsResizing(false);
   };
 
-  // Add mouse event listeners for resize
   useEffect(() => {
     if (isResizing) {
       document.body.classList.add('resizing');
@@ -253,12 +278,55 @@ export function InteractiveMapSection() {
     }
   }, [isResizing]);
 
-  // Round Rock / North Austin bounds
-  const mapCenter: [number, number] = [30.4583, -97.7089];
-  const mapBounds: [[number, number], [number, number]] = [
-    [30.3, -97.85],  // Southwest
-    [30.6, -97.55]   // Northeast
-  ];
+  // Enable 3D buildings when map loads
+  useEffect(() => {
+    if (mapRef.current) {
+      const map = mapRef.current.getMap();
+      map.on('load', () => {
+        // Enable 3D buildings
+        const layers = map.getStyle().layers;
+        const labelLayerId = layers.find(
+          (layer: any) => layer.type === 'symbol' && layer.layout['text-field']
+        )?.id;
+
+        if (!map.getLayer('3d-buildings')) {
+          map.addLayer(
+            {
+              id: '3d-buildings',
+              source: 'composite',
+              'source-layer': 'building',
+              filter: ['==', 'extrude', 'true'],
+              type: 'fill-extrusion',
+              minzoom: 15,
+              paint: {
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  15,
+                  0,
+                  15.05,
+                  ['get', 'height']
+                ],
+                'fill-extrusion-base': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  15,
+                  0,
+                  15.05,
+                  ['get', 'min_height']
+                ],
+                'fill-extrusion-opacity': 0.6
+              }
+            },
+            labelLayerId
+          );
+        }
+      });
+    }
+  }, []);
 
   return (
     <section className="min-h-screen relative bg-black py-16">
@@ -329,15 +397,13 @@ export function InteractiveMapSection() {
             boxShadow: '0px 30px 80px rgba(0,0,0,0.9), 0px 0px 0px 2px #333333, inset 0px 0px 0px 1px #2A2A2A'
           }}
         >
-          {/* Camera (small dot at top center) */}
+          {/* Camera */}
           <div
             className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[8px] h-[8px] bg-[#0A0A0A] rounded-full z-10"
-            style={{
-              boxShadow: '0 0 0 2px #1A1A1A'
-            }}
+            style={{ boxShadow: '0 0 0 2px #1A1A1A' }}
           />
 
-          {/* Decorative Corner Accents (Gold) */}
+          {/* Decorative Corner Accents */}
           <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-[#D4AF37] rounded-tl-lg opacity-30"></div>
           <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-[#D4AF37] rounded-tr-lg opacity-30"></div>
           <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-[#D4AF37] rounded-bl-lg opacity-30"></div>
@@ -351,261 +417,212 @@ export function InteractiveMapSection() {
               background: '#0A0A0A'
             }}
           >
-        {/* Leaflet Map */}
-        <MapContainer
-          center={mapCenter}
-          zoom={11}
-          maxBounds={mapBounds}
-          minZoom={10}
-          maxZoom={16}
-          style={{ height: '100%', width: '100%', background: '#0A0A0A' }}
-          zoomControl={true}
-        >
-          {/* Dark themed map tiles */}
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          />
+            {/* Mapbox Map */}
+            <Map
+              ref={mapRef}
+              mapboxAccessToken={MAPBOX_TOKEN}
+              initialViewState={{
+                longitude: -97.7089,
+                latitude: 30.4583,
+                zoom: 11,
+                pitch: 0,
+                bearing: 0
+              }}
+              style={{ width: '100%', height: '100%' }}
+              mapStyle={MAPBOX_STYLE}
+              minZoom={10}
+              maxZoom={16}
+              maxBounds={[
+                [-97.85, 30.3], // Southwest
+                [-97.55, 30.6]  // Northeast
+              ]}
+            >
+              {/* Navigation Controls */}
+              <NavigationControl position="top-right" />
 
-          {/* Location Markers */}
-          {filteredLocations.map((location) => {
-            const icon = createCustomIcon(
-              location.categoryColor,
-              location.category === 'Mosque' ? '🕌' :
-              location.category === 'Food' ? '🍽️' :
-              location.category === 'Education' ? '📚' : '🛒'
-            );
-
-            return (
-              <Marker
-                key={location.id}
-                position={location.coords}
-                icon={icon}
-                eventHandlers={{
-                  click: () => handleLocationClick(location),
-                }}
-              >
-                <Popup>
-                  <div className="text-sm">
-                    <strong>{location.name}</strong>
-                    <br />
-                    {location.category}
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MapContainer>
-
-        {/* Detail Panel - Positioned inside map */}
-        <AnimatePresence>
-          {selectedLocation && (
-            <>
-              {/* Overlay */}
-              <motion.div
-                className="absolute inset-0 bg-black/70 z-[2000]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={closeDetailPanel}
-              />
-
-              {/* Panel */}
-              <motion.div
-                className="absolute right-0 top-0 h-full bg-[#1A1A1A] border-l-4 z-[2001] overflow-y-auto"
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-                style={{
-                  width: `${panelWidth}px`,
-                  borderLeftColor: '#14B8A6',
-                  boxShadow: '-4px 0 20px rgba(20, 184, 166, 0.3)',
-                  userSelect: isResizing ? 'none' : 'auto'
-                }}
-              >
-                {/* Resize Handle - Drag to resize panel */}
-                <div
-                  className="absolute left-0 top-0 h-full w-3 cursor-ew-resize z-[2002] group bg-gradient-to-r from-[#14B8A6]/20 to-transparent hover:from-[#14B8A6]/40"
-                  onMouseDown={handleResizeStart}
-                  style={{
-                    boxShadow: 'inset 2px 0 4px rgba(20, 184, 166, 0.3)'
-                  }}
-                >
-                  <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center justify-center">
-                    <div className="flex flex-col gap-1">
-                      <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
-                      <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
-                      <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-              {/* Header with Image */}
-              <div className="relative h-[300px] bg-[#0A0A0A]">
-                <img
-                  src={selectedLocation.image}
-                  alt={selectedLocation.name}
-                  className="w-full h-full object-cover"
+              {/* Location Markers */}
+              {filteredLocations.map((location) => (
+                <CustomMarker
+                  key={location.id}
+                  location={location}
+                  onClick={() => handleLocationClick(location)}
                 />
-                <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-                  <button
+              ))}
+            </Map>
+
+            {/* Detail Panel */}
+            <AnimatePresence>
+              {selectedLocation && (
+                <>
+                  {/* Overlay */}
+                  <motion.div
+                    className="absolute inset-0 bg-black/70 z-[2000]"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     onClick={closeDetailPanel}
-                    className="w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                  />
+
+                  {/* Panel */}
+                  <motion.div
+                    className="absolute right-0 top-0 h-full bg-[#1A1A1A] border-l-4 z-[2001] overflow-y-auto"
+                    initial={{ x: '100%' }}
+                    animate={{ x: 0 }}
+                    exit={{ x: '100%' }}
+                    transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                    style={{
+                      width: `${panelWidth}px`,
+                      borderLeftColor: '#14B8A6',
+                      boxShadow: '-4px 0 20px rgba(20, 184, 166, 0.3)',
+                      userSelect: isResizing ? 'none' : 'auto'
+                    }}
                   >
-                    <X size={20} />
-                  </button>
-                  <div className="flex gap-2">
-                    <button className="w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
-                      <Heart size={20} />
-                    </button>
-                    <button className="w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
-                      <Share2 size={20} />
-                    </button>
-                  </div>
-                </div>
-                <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm border border-[#D4AF37] px-3 py-1 rounded-full text-white text-sm"
-                     style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.3)' }}>
-                  1 / 5 Photos
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6">
-                {/* Title */}
-                <h3 className="text-2xl font-bold text-white mb-2">{selectedLocation.name}</h3>
-                <div className="flex items-center gap-2 mb-4">
-                  <p className="text-[#14B8A6] text-sm font-medium">{selectedLocation.category}</p>
-                  {selectedLocation.priceRange && (
-                    <>
-                      <span className="text-[#666666]">•</span>
-                      <p className="text-[#666666] text-sm">{selectedLocation.priceRange}</p>
-                    </>
-                  )}
-                  <span className="text-[#666666]">•</span>
-                  <div className="flex items-center gap-1">
-                    <Star size={14} fill="#F59E0B" color="#F59E0B" />
-                    <span className="text-[#F59E0B] text-sm font-semibold">{selectedLocation.rating}</span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p className="text-[#999999] text-sm leading-relaxed mb-6">
-                  {selectedLocation.description}
-                </p>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col gap-3 mb-6">
-                  <button className="w-full py-3 px-6 bg-[#14B8A6] text-white rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#10A896] transition-colors">
-                    <Navigation size={20} />
-                    Get Directions
-                  </button>
-                  <button className="w-full py-3 px-6 bg-transparent border-2 border-[#14B8A6] text-[#14B8A6] rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#14B8A6]/10 transition-colors">
-                    <Phone size={20} />
-                    Call
-                  </button>
-                  <button className="w-full py-3 px-6 bg-transparent border-2 border-[#14B8A6] text-[#14B8A6] rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#14B8A6]/10 transition-colors">
-                    <Star size={20} />
-                    View Reviews on Google & Yelp
-                    <ExternalLink size={16} />
-                  </button>
-                </div>
-
-                {/* Contact Information */}
-                <div className="border-t border-[#333333] pt-6">
-                  <h4 className="text-xl font-bold text-white mb-4">Contact Information</h4>
-
-                  <div className="space-y-4">
-                    <div>
-                      <p className="text-[#666666] text-sm uppercase mb-1">ADDRESS</p>
-                      <p className="text-white">{selectedLocation.address}</p>
+                    {/* Resize Handle */}
+                    <div
+                      className="absolute left-0 top-0 h-full w-3 cursor-ew-resize z-[2002] group bg-gradient-to-r from-[#14B8A6]/20 to-transparent hover:from-[#14B8A6]/40"
+                      onMouseDown={handleResizeStart}
+                      style={{ boxShadow: 'inset 2px 0 4px rgba(20, 184, 166, 0.3)' }}
+                    >
+                      <div className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                        <div className="flex flex-col gap-1">
+                          <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
+                          <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
+                          <div className="w-1 h-6 bg-[#14B8A6] rounded-full"></div>
+                        </div>
+                      </div>
                     </div>
 
-                    <div>
-                      <p className="text-[#666666] text-sm uppercase mb-1">PHONE</p>
-                      <p className="text-[#14B8A6]">{selectedLocation.phone}</p>
+                    {/* Header with Image */}
+                    <div className="relative h-[300px] bg-[#0A0A0A]">
+                      <img
+                        src={selectedLocation.image}
+                        alt={selectedLocation.name}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+                        <button
+                          onClick={closeDetailPanel}
+                          className="w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                        >
+                          <X size={20} />
+                        </button>
+                        <div className="flex gap-2">
+                          <button className="w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+                            <Heart size={20} />
+                          </button>
+                          <button className="w-10 h-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors">
+                            <Share2 size={20} />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm border border-[#D4AF37] px-3 py-1 rounded-full text-white text-sm"
+                           style={{ boxShadow: '0 0 10px rgba(212, 175, 55, 0.3)' }}>
+                        1 / 5 Photos
+                      </div>
                     </div>
 
-                    <div>
-                      <p className="text-[#666666] text-sm uppercase mb-1">WEBSITE</p>
-                      <p className="text-[#14B8A6] flex items-center gap-1">
-                        Search Website <ExternalLink size={14} />
+                    {/* Content */}
+                    <div className="p-6">
+                      {/* Title */}
+                      <h3 className="text-2xl font-bold text-white mb-2">{selectedLocation.name}</h3>
+                      <div className="flex items-center gap-2 mb-4">
+                        <p className="text-[#14B8A6] text-sm font-medium">{selectedLocation.category}</p>
+                        {selectedLocation.priceRange && (
+                          <>
+                            <span className="text-[#666666]">•</span>
+                            <p className="text-[#666666] text-sm">{selectedLocation.priceRange}</p>
+                          </>
+                        )}
+                        <span className="text-[#666666]">•</span>
+                        <div className="flex items-center gap-1">
+                          <Star size={14} fill="#F59E0B" color="#F59E0B" />
+                          <span className="text-[#F59E0B] text-sm font-semibold">{selectedLocation.rating}</span>
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <p className="text-[#999999] text-sm leading-relaxed mb-6">
+                        {selectedLocation.description}
                       </p>
+
+                      {/* Action Buttons */}
+                      <div className="flex flex-col gap-3 mb-6">
+                        <button className="w-full py-3 px-6 bg-[#14B8A6] text-white rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#10A896] transition-colors">
+                          <Navigation size={20} />
+                          Get Directions
+                        </button>
+                        <button className="w-full py-3 px-6 bg-transparent border-2 border-[#14B8A6] text-[#14B8A6] rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#14B8A6]/10 transition-colors">
+                          <Phone size={20} />
+                          Call
+                        </button>
+                        <button className="w-full py-3 px-6 bg-transparent border-2 border-[#14B8A6] text-[#14B8A6] rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-[#14B8A6]/10 transition-colors">
+                          <Star size={20} />
+                          View Reviews on Google & Yelp
+                          <ExternalLink size={16} />
+                        </button>
+                      </div>
+
+                      {/* Contact Information */}
+                      <div className="border-t border-[#333333] pt-6">
+                        <h4 className="text-xl font-bold text-white mb-4">Contact Information</h4>
+
+                        <div className="space-y-4">
+                          <div>
+                            <p className="text-[#666666] text-sm uppercase mb-1">ADDRESS</p>
+                            <p className="text-white">{selectedLocation.address}</p>
+                          </div>
+
+                          <div>
+                            <p className="text-[#666666] text-sm uppercase mb-1">PHONE</p>
+                            <p className="text-[#14B8A6]">{selectedLocation.phone}</p>
+                          </div>
+
+                          <div>
+                            <p className="text-[#666666] text-sm uppercase mb-1">WEBSITE</p>
+                            <p className="text-[#14B8A6] flex items-center gap-1">
+                              Search Website <ExternalLink size={14} />
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>
           </div>
-          {/* End Screen Container */}
         </div>
-        {/* End Tablet Mockup Frame */}
       </motion.div>
 
-      {/* Leaflet CSS Override for Dark Theme with Teal & Gold Map Colors */}
+      {/* Global Styles */}
       <style>{`
-        .leaflet-container {
-          background: #0A0A0A !important;
-        }
-
-        /* Teal & Gold Map Colorization */
-        .leaflet-tile-pane {
-          filter:
-            sepia(0.4)
-            hue-rotate(150deg)
-            saturate(2.5)
-            brightness(0.9)
-            contrast(1.2);
-        }
-
-        /* Add teal overlay for water emphasis */
-        .leaflet-tile-container::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(
-            135deg,
-            rgba(20, 184, 166, 0.15) 0%,
-            rgba(212, 175, 55, 0.1) 50%,
-            rgba(20, 184, 166, 0.15) 100%
-          );
-          pointer-events: none;
-          mix-blend-mode: overlay;
-        }
-
-        .leaflet-popup-content-wrapper {
-          background: #1A1A1A;
-          color: #FFFFFF;
-          border: 1px solid #333333;
-        }
-        .leaflet-popup-tip {
-          background: #1A1A1A;
-        }
-        .leaflet-control-attribution {
-          background: rgba(26, 26, 26, 0.8) !important;
-          color: #666666 !important;
-        }
-        .leaflet-control-attribution a {
-          color: #14B8A6 !important;
-        }
-        .leaflet-control-zoom a {
-          background: #1A1A1A !important;
-          border: 1px solid #333333 !important;
-          color: #FFFFFF !important;
-        }
-        .leaflet-control-zoom a:hover {
-          background: #333333 !important;
-        }
-
         /* Resize cursor when dragging */
         body.resizing {
           cursor: ew-resize !important;
           user-select: none !important;
+        }
+
+        /* Mapbox control styling */
+        .mapboxgl-ctrl-group {
+          background: #1A1A1A !important;
+          border: 1px solid #333333 !important;
+        }
+
+        .mapboxgl-ctrl-group button {
+          background-color: #1A1A1A !important;
+          color: #FFFFFF !important;
+        }
+
+        .mapboxgl-ctrl-group button:hover {
+          background-color: #333333 !important;
+        }
+
+        .mapboxgl-ctrl-attrib {
+          background-color: rgba(26, 26, 26, 0.8) !important;
+        }
+
+        .mapboxgl-ctrl-attrib a {
+          color: #14B8A6 !important;
         }
       `}</style>
     </section>
