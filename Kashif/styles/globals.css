@@ -1,5 +1,4 @@
-/* Import Aref Ruqaa Font Directly */
-@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap');
+/* System fonts to match mobile app */
 
 @tailwind base;
 @tailwind components;
@@ -129,18 +128,23 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Aref Ruqaa', serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   }
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Aref Ruqaa', serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6, p, span, div, button, input, label, a {
-    font-family: 'Aref Ruqaa', serif !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  /* Arabic text should use system Arabic font */
+  .arabic-text {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans Arabic', 'Arial', sans-serif;
   }
 }
 

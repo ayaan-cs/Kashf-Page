@@ -1,14 +1,14 @@
 import { motion } from 'motion/react';
-import { MapPin, Clock, Heart, Compass } from 'lucide-react';
 
 interface FeatureCardProps {
-  icon: React.ReactNode;
+  iconSrc: string;
+  iconAlt: string;
   title: string;
   description: string;
   delay: number;
 }
 
-function FeatureCard({ icon, title, description, delay }: FeatureCardProps) {
+function FeatureCard({ iconSrc, iconAlt, title, description, delay }: FeatureCardProps) {
   return (
     <motion.div
       className="group relative bg-[#161719] border border-[#333333] rounded-2xl p-8 hover:border-[#14B8A6]/50 transition-all duration-300"
@@ -24,13 +24,19 @@ function FeatureCard({ icon, title, description, delay }: FeatureCardProps) {
       <div className="relative z-10">
         {/* Icon */}
         <motion.div
-          className="w-14 h-14 rounded-xl bg-[#14B8A6]/10 flex items-center justify-center mb-6"
-          whileHover={{ scale: 1.1, backgroundColor: 'rgba(20, 184, 166, 0.2)' }}
+          className="w-20 h-20 rounded-xl bg-[#14B8A6]/20 flex items-center justify-center mb-6"
+          whileHover={{ scale: 1.1, backgroundColor: 'rgba(20, 184, 166, 0.3)' }}
           transition={{ duration: 0.3 }}
         >
-          <div className="text-[#14B8A6]">
-            {icon}
-          </div>
+          <img 
+            src={iconSrc} 
+            alt={iconAlt}
+            className="w-14 h-14 object-contain"
+            style={{
+              filter: 'brightness(10) contrast(3) saturate(2)',
+              opacity: 1,
+            }}
+          />
         </motion.div>
 
         {/* Content */}
@@ -61,13 +67,20 @@ export function FeatureHighlights() {
       />
 
       <div className="max-w-[1200px] mx-auto relative z-10">
-        {/* Section Header */}
+        {/* Section Header with Liquid Glass Effect */}
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-20 rounded-3xl px-8 py-12 md:px-12 md:py-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          style={{
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+            backdropFilter: 'blur(24px) saturate(200%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+          }}
         >
           <motion.div
             className="inline-block mb-4"
@@ -95,25 +108,29 @@ export function FeatureHighlights() {
         {/* Feature Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <FeatureCard
-            icon={<MapPin size={26} strokeWidth={1.5} />}
+            iconSrc="/muslim-icon.png"
+            iconAlt="Discover Nearby"
             title="Discover Nearby"
             description="Find mosques, halal restaurants, and Muslim-owned businesses around you instantly"
             delay={0}
           />
           <FeatureCard
-            icon={<Clock size={26} strokeWidth={1.5} />}
+            iconSrc="/pray-icon.png"
+            iconAlt="Prayer Times"
             title="Prayer Times"
             description="Never miss a prayer with location-based accurate prayer times and notifications"
             delay={0.1}
           />
           <FeatureCard
-            icon={<Heart size={26} strokeWidth={1.5} />}
+            iconSrc="/allah-icon.png"
+            iconAlt="Save Favorites"
             title="Save Favorites"
             description="Bookmark your favorite places for quick access anytime, anywhere"
             delay={0.2}
           />
           <FeatureCard
-            icon={<Compass size={26} strokeWidth={1.5} />}
+            iconSrc="/qibla-compass-icon.png"
+            iconAlt="Qibla Finder"
             title="Qibla Finder"
             description="Always know the direction of the Qibla with our built-in compass"
             delay={0.3}
