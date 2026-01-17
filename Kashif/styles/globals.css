@@ -1,3 +1,10 @@
+/* Import Aref Ruqaa Font Directly */
+@import url('https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -122,12 +129,18 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    font-family: 'Aref Ruqaa', serif !important;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Aref Ruqaa', serif !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6, p, span, div, button, input, label, a {
+    font-family: 'Aref Ruqaa', serif !important;
   }
 }
 

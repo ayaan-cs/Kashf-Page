@@ -9,10 +9,13 @@ import { EmailInput } from './components/EmailInput';
 import { IslamicPattern, IslamicCornerOrnament } from './components/IslamicPattern';
 import { IslamicDivider } from './components/IslamicDivider';
 import { IslamicFrame } from './components/IslamicFrame';
-import { FloatingMapPin, MapRoute, MapGrid, LocationDots, InteractiveMapSection } from './components/MapElements';
+import { FloatingMapPin, MapRoute, MapGrid, LocationDots } from './components/MapElements';
+import { InteractiveMapSection } from './components/InteractiveMapSection';
 import { TealGeometricPattern, TealMandala, TealFrame, TealCornerOrnament, TealDivider, FloatingTealAccent } from './components/TealPatterns';
 import { GoldMandala, GoldCornerOrnament, FloatingGoldAccent } from './components/TealPatterns';
-import kashfLogo from 'figma:asset/1358ab4925ff72f9c5a9ccc4cf44b9b7859e5695.png';
+import { AppStoreBadges } from './components/AppStoreBadges';
+import { FeatureHighlights } from './components/FeatureHighlights';
+import { siteConfig } from './config';
 
 export default function App() {
   const [email, setEmail] = useState('');
@@ -80,8 +83,8 @@ export default function App() {
         
         <div className="text-center max-w-[900px] relative z-10">
           {/* Logo */}
-          <motion.img 
-            src={kashfLogo} 
+          <motion.img
+            src="/kashf_logo.jpg"
             alt="Kashf Logo"
             className="w-[400px] md:w-[400px] sm:w-[280px] h-auto mx-auto mb-16"
             initial={{ opacity: 0, y: 20 }}
@@ -112,7 +115,7 @@ export default function App() {
           </motion.h1>
           
           {/* Hero Subtitle */}
-          <motion.p 
+          <motion.p
             className="text-[18px] md:text-[18px] sm:text-[16px] leading-[1.7] text-[#B0B0B0] max-w-[600px] mx-auto"
             style={{ fontWeight: 400 }}
             initial={{ opacity: 0, y: 20 }}
@@ -168,6 +171,9 @@ export default function App() {
           </motion.p>
         </div>
       </section>
+
+      {/* FEATURE HIGHLIGHTS - Quick Overview */}
+      <FeatureHighlights />
 
       {/* SECTION 3: FEATURE 1 - DISCOVERY MAP */}
       <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#161719] relative">
@@ -422,27 +428,8 @@ export default function App() {
         </div>
       </section>
 
-      {/* INTERACTIVE MAP VISUALIZATION SECTION */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#161719] relative overflow-hidden">
-        <MapRoute />
-        
-        <div className="max-w-[1400px] w-full relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-          >
-            <InteractiveMapSection />
-          </motion.div>
-          
-          {/* Floating Map Pins around the section */}
-          <FloatingMapPin delay={0.2} className="absolute top-[10%] left-[5%] hidden md:block" />
-          <FloatingMapPin delay={0.4} className="absolute top-[15%] right-[8%] hidden md:block" />
-          <FloatingMapPin delay={0.6} className="absolute bottom-[20%] left-[10%] hidden md:block" />
-          <FloatingMapPin delay={0.8} className="absolute bottom-[15%] right-[12%] hidden md:block" />
-        </div>
-      </section>
+      {/* INTERACTIVE MAP SECTION - Explore Your Community */}
+      <InteractiveMapSection />
 
       {/* SECTION 8: CTA */}
       <section className="min-h-[80vh] flex items-center justify-center px-8 py-32 bg-[#0A0A0A] relative">
@@ -498,25 +485,49 @@ export default function App() {
               Get Updates
             </PrimaryButton>
           </motion.form>
-          
+
+          {/* App Store Badges */}
+          <motion.div
+            className="mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.7 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            <p className="text-[13px] text-[#666666] mb-4">Or download when available:</p>
+            <AppStoreBadges showComingSoon={true} />
+          </motion.div>
+
           {/* Social Links */}
-          <motion.div 
+          <motion.div
             className="flex justify-center gap-6 mb-12"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            {['GitHub', 'Instagram'].map((social) => (
+            {siteConfig.social.github && (
               <a
-                key={social}
-                href="#"
+                href={siteConfig.social.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[14px] text-[#666666] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-[20px] transition-all duration-300"
                 style={{ fontWeight: 500 }}
               >
-                {social}
+                GitHub
               </a>
-            ))}
+            )}
+            {siteConfig.social.instagram && (
+              <a
+                href={siteConfig.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[14px] text-[#666666] hover:text-white hover:bg-[#333333] px-4 py-2 rounded-[20px] transition-all duration-300"
+                style={{ fontWeight: 500 }}
+              >
+                Instagram
+              </a>
+            )}
           </motion.div>
           
           {/* Buy Me a Coffee */}
@@ -528,7 +539,9 @@ export default function App() {
             transition={{ duration: 0.8, delay: 0.7 }}
           >
             <a
-              href="#"
+              href={siteConfig.buyMeACoffee}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-3 px-6 py-3 bg-[#1a1a1a] hover:bg-[#252525] border border-[#333333] rounded-full transition-all duration-300 group"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
@@ -595,26 +608,44 @@ export default function App() {
             Free the Ummah - Gaza, China, India, Sudan, and beyond
           </motion.p>
           
-          <motion.div 
+          <motion.div
             className="flex flex-wrap justify-center gap-8 mb-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            {['Home', 'Features', 'Contact', 'Privacy'].map((link) => (
-              <a
-                key={link}
-                href="#"
-                className="text-[14px] text-[#666666] hover:text-white transition-colors duration-300"
-                style={{ fontWeight: 400 }}
-              >
-                {link}
-              </a>
-            ))}
+            <a
+              href={siteConfig.links.home}
+              className="text-[14px] text-[#666666] hover:text-white transition-colors duration-300"
+              style={{ fontWeight: 400 }}
+            >
+              Home
+            </a>
+            <a
+              href={siteConfig.links.features}
+              className="text-[14px] text-[#666666] hover:text-white transition-colors duration-300"
+              style={{ fontWeight: 400 }}
+            >
+              Features
+            </a>
+            <a
+              href={`mailto:${siteConfig.email.contact}`}
+              className="text-[14px] text-[#666666] hover:text-white transition-colors duration-300"
+              style={{ fontWeight: 400 }}
+            >
+              Contact
+            </a>
+            <a
+              href={siteConfig.links.privacy}
+              className="text-[14px] text-[#666666] hover:text-white transition-colors duration-300"
+              style={{ fontWeight: 400 }}
+            >
+              Privacy
+            </a>
           </motion.div>
           
-          <motion.p 
+          <motion.p
             className="text-[13px] text-[#666666]"
             style={{ fontWeight: 400 }}
             initial={{ opacity: 0 }}
@@ -622,7 +653,7 @@ export default function App() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            © 2026 Kashf. Built with love for the Muslim community.
+            © {siteConfig.meta.year} Kashf. Built with love for the Muslim community.
           </motion.p>
         </div>
       </footer>
