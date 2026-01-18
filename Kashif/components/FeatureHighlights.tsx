@@ -67,20 +67,13 @@ export function FeatureHighlights() {
       />
 
       <div className="max-w-[1200px] mx-auto relative z-10">
-        {/* Section Header with Liquid Glass Effect */}
+        {/* Section Header */}
         <motion.div
-          className="text-center mb-20 rounded-3xl px-8 py-12 md:px-12 md:py-16"
+          className="text-center mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          style={{
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
-            backdropFilter: 'blur(24px) saturate(200%)',
-            WebkitBackdropFilter: 'blur(24px) saturate(200%)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
-          }}
         >
           <motion.div
             className="inline-block mb-4"

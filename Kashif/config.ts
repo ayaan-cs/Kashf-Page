@@ -19,7 +19,8 @@ export const siteConfig = {
   social: {
     // Replace '#' with your actual social media URLs
     github: 'https://github.com/yourusername',
-    instagram: 'https://instagram.com/yourusername',
+    instagram: 'https://www.instagram.com/kashf.app/',
+    email: 'mailto:kashf.team@gmail.com',
     // You can add more social links here as needed
     twitter: '',
     facebook: '',

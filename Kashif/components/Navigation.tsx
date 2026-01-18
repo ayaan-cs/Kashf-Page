@@ -13,10 +13,10 @@ export function Navigation() {
   }, []);
 
   const navItems = [
-    { label: 'Overview', href: '#overview' },
-    { label: 'Features', href: '#features' },
+    { label: 'Overview', href: '#features' },
     { label: 'Map', href: '#map' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Favorites', href: '#favorites' },
+    { label: 'Prayer', href: '#prayer' },
   ];
 
   return (
@@ -93,7 +93,14 @@ export function Navigation() {
 
         {/* CTA Button - Right */}
         <motion.a
-          href="#contact"
+          href="#overview"
+          onClick={(e) => {
+            e.preventDefault();
+            const element = document.getElementById('overview');
+            if (element) {
+              element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
           className="px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold rounded-full transition-all duration-300 shadow-lg shadow-teal-500/20 hover:shadow-teal-500/30 hover:scale-105"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

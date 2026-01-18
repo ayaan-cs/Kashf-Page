@@ -1,35 +1,17 @@
-import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { useState } from 'react';
+import { motion } from 'motion/react';
 import { SectionDivider } from './components/SectionDivider';
 import { PhoneMockup } from './components/PhoneMockup';
-import { CategoryButton } from './components/CategoryButton';
-import { PrimaryButton } from './components/PrimaryButton';
-import { EmailInput } from './components/EmailInput';
-import { IslamicPattern, IslamicCornerOrnament } from './components/IslamicPattern';
-import { IslamicDivider } from './components/IslamicDivider';
-import { IslamicFrame } from './components/IslamicFrame';
-import { FloatingMapPin, MapRoute, MapGrid, LocationDots } from './components/MapElements';
-import { InteractiveMapSection } from './components/InteractiveMapSection';
-import { TealGeometricPattern, TealMandala, TealFrame, TealCornerOrnament, TealDivider, FloatingTealAccent } from './components/TealPatterns';
+import { IslamicPattern } from './components/IslamicPattern';
+import { MapGrid, LocationDots } from './components/MapElements';
+import { TealGeometricPattern, TealMandala, TealCornerOrnament, TealDivider, FloatingTealAccent } from './components/TealPatterns';
 import { GoldMandala, GoldCornerOrnament, FloatingGoldAccent } from './components/TealPatterns';
 import { FeatureHighlights } from './components/FeatureHighlights';
 import { Navigation } from './components/Navigation';
+import { BetaForm } from './components/BetaForm';
 import { siteConfig } from './config';
 
 export default function App() {
-  const [email, setEmail] = useState('');
-  const [activeCategory, setActiveCategory] = useState('All');
-  const { scrollYProgress } = useScroll();
-  
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Email submitted:', email);
-    alert('Thank you for your interest! We will keep you updated.');
-    setEmail('');
-  };
 
   return (
     <div className="bg-black text-white overflow-x-hidden">
@@ -41,8 +23,6 @@ export default function App() {
         id="overview"
         className="relative min-h-screen flex items-center justify-center px-8 pt-24 pb-16"
         style={{ 
-          opacity: heroOpacity,
-          scale: heroScale,
           background: '#161719'
         }}
       >
@@ -93,7 +73,23 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
           >
-                Discover Muslim <span style={{ color: '#14B8A6' }}>essentials</span> in a few clicks
+                Discover{' '}
+                <span
+                  className="inline-block px-2.5 py-1 rounded-full mx-1"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                    fontSize: '0.65em',
+                    lineHeight: 'inherit',
+                    fontWeight: 'inherit',
+                  }}
+                >
+                  kashf • <span className="arabic-text">كاشف</span>
+                </span>
+                {' '}Muslim <span style={{ color: '#14B8A6' }}>essentials</span> in a few clicks
           </motion.h1>
           
           {/* Hero Subtitle */}
@@ -108,40 +104,28 @@ export default function App() {
           </motion.p>
             </motion.div>
         
-            {/* Right Side - Tally Form with Glass Effect */}
+            {/* Right Side - Form with Glass Effect */}
         <motion.div 
-              className="relative"
+              className="relative w-full flex items-center justify-center"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <div
-                className="rounded-3xl p-8 md:p-10"
+                className="rounded-2xl p-5 md:p-6 w-full max-w-sm"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.06) 100%)',
                   backdropFilter: 'blur(24px) saturate(200%)',
                   WebkitBackdropFilter: 'blur(24px) saturate(200%)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.18)',
+                  boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.12)',
                 }}
               >
-                <h3 className="text-[24px] font-bold text-white mb-6 text-center">JOIN THE BETA</h3>
-                {/* Tally form will be embedded here - replace 'YOUR_FORM_ID' with actual Tally form ID */}
-                <div className="w-full">
-                  <iframe
-                    src="https://tally.so/embed/YOUR_FORM_ID?hideTitle=1&transparentBackground=1&alignLeft=1"
-                    width="100%"
-                    height="400"
-                    frameBorder="0"
-                    marginHeight={0}
-                    marginWidth={0}
-                    title="Join the Beta"
-                    className="rounded-xl"
-                    style={{
-                      background: 'transparent',
-                    }}
-                  />
-                </div>
+                {/* Title */}
+                <h3 className="text-[15px] font-semibold text-[#14B8A6] mb-5 tracking-tight uppercase text-center">JOIN THE BETA</h3>
+                
+                {/* Custom Beta Form */}
+                <BetaForm />
               </div>
         </motion.div>
           </div>
@@ -179,7 +163,7 @@ export default function App() {
             viewport={{ once: true, amount: 0.7 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Moving to a new place or traveling? Finding the nearest mosque for Jummah prayers, locating halal restaurants, or discovering Muslim-owned businesses shouldn't be a struggle. Kashf brings your Muslim community <span style={{ color: '#14B8A6' }}>essentials</span> to your <span style={{ color: '#14B8A6' }}>fingertips</span>.
+            Moving to a new place or traveling? Finding the nearest mosque, locating halal restaurants, or discovering Muslim-owned businesses shouldn't be a struggle. Kashf brings your Muslim community <span style={{ color: '#14B8A6' }}>essentials</span> to your <span style={{ color: '#14B8A6' }}>fingertips</span>.
           </motion.p>
         </div>
       </section>
@@ -190,7 +174,7 @@ export default function App() {
       </div>
 
       {/* SECTION 3: FEATURE 1 - DISCOVERY MAP */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#161719] relative">
+      <section id="map" className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#161719] relative">
         <MapGrid opacity={0.02} />
         <LocationDots />
         
@@ -228,12 +212,56 @@ export default function App() {
                 Explore an <span style={{ color: '#14B8A6' }}>interactive map</span> showing mosques, halal restaurants, grocery stores, and Muslim-owned businesses in your area. Never miss a prayer or meal again.
               </p>
               
-              <p 
-                className="text-[15px] md:text-[15px] sm:text-[14px] text-[#666666]"
-                style={{ fontWeight: 400 }}
-              >
-                <span style={{ color: '#059669' }}>Mosques</span> • <span style={{ color: '#DC2626' }}>Halal Food</span> • <span style={{ color: '#D97706' }}>Grocery Stores</span> • <span style={{ color: '#7C3AED' }}>Education Centers</span>
-              </p>
+              <div className="flex flex-wrap gap-3">
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#059669]" style={{ fontWeight: 400 }}>Mosques</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#DC2626]" style={{ fontWeight: 400 }}>Halal Food</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#D97706]" style={{ fontWeight: 400 }}>Grocery Stores</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#7C3AED]" style={{ fontWeight: 400 }}>Education Centers</span>
+                </div>
+              </div>
             </motion.div>
             
             {/* Phone Mockup - Right with Gold Frame */}
@@ -278,7 +306,7 @@ export default function App() {
               <GoldCornerOrnament position="top-right" size={90} className="absolute -top-10 -right-10 z-0" opacity={0.4} />
               <GoldCornerOrnament position="bottom-left" size={90} className="absolute -bottom-10 -left-10 z-0" opacity={0.4} />
               
-              <PhoneMockup variant="search" />
+              <PhoneMockup variant="mosque-detail" />
             </motion.div>
             
             {/* Text Content - Right */}
@@ -303,22 +331,66 @@ export default function App() {
                 className="text-[16px] md:text-[16px] sm:text-[15px] leading-[1.8] text-[#999999] mb-8"
                 style={{ fontWeight: 400 }}
               >
-                Get <span style={{ color: '#14B8A6' }}>comprehensive</span> details about each location including ratings, photos, prayer times, directions, and community reviews. Make <span style={{ color: '#14B8A6' }}>informed</span> decisions with confidence.
+                Get <span style={{ color: '#14B8A6' }}>comprehensive</span> details about each location including ratings & reviews, photos, phone number, website, and directions. Make <span style={{ color: '#14B8A6' }}>informed</span> decisions with confidence.
               </p>
               
-              <p 
-                className="text-[15px] md:text-[15px] sm:text-[14px] text-[#666666]"
-                style={{ fontWeight: 400 }}
-              >
-                Ratings • Photos • Directions • Reviews
-              </p>
+              <div className="flex flex-wrap gap-3">
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Ratings</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Photos</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Directions</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Reviews</span>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* SECTION 5: FEATURE 3 - FAVORITES */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#000000] relative">
+      <section id="favorites" className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#000000] relative">
         {/* Vibrant Teal and Gold decorative elements around phone */}
         <TealMandala size={150} opacity={0.24} delay={0.2} variant={2} className="absolute top-20 right-[12%] hidden lg:block" />
         <GoldMandala size={130} opacity={0.30} delay={0.4} variant={3} className="absolute bottom-28 right-[18%] hidden lg:block" />
@@ -353,12 +425,44 @@ export default function App() {
                 Build your <span style={{ color: '#14B8A6' }}>personal collection</span> of go-to mosques, favorite restaurants, and trusted businesses. Access them <span style={{ color: '#14B8A6' }}>instantly</span> whenever you need them.
               </p>
               
-              <p 
-                className="text-[15px] md:text-[15px] sm:text-[14px] text-[#666666]"
-                style={{ fontWeight: 400 }}
-              >
-                Quick Access • Personal Collections • Offline Access
-              </p>
+              <div className="flex flex-wrap gap-3">
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Quick Access</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Personal Collections</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Offline Access</span>
+                </div>
+              </div>
             </motion.div>
             
             {/* Phone Mockup - Right with Gold decorations */}
@@ -373,14 +477,14 @@ export default function App() {
               <GoldCornerOrnament position="top-left" size={90} className="absolute -top-10 -left-10 z-0" opacity={0.42} />
               <GoldCornerOrnament position="bottom-right" size={90} className="absolute -bottom-10 -right-10 z-0" opacity={0.42} />
               
-              <PhoneMockup variant="search" />
+              <PhoneMockup variant="favorites" />
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* SECTION 6: FEATURE 4 - PRAYER TIMES */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#0A0A0A] relative">
+      <section id="prayer" className="min-h-screen flex items-center justify-center px-8 py-32 bg-[#0A0A0A] relative">
         {/* Vibrant Gold and Teal decorative elements around phone */}
         <GoldMandala size={170} opacity={0.34} delay={0.2} variant={1} className="absolute top-20 left-[8%] hidden lg:block" />
         <TealMandala size={145} opacity={0.22} delay={0.4} variant={3} className="absolute bottom-24 left-[12%] hidden lg:block" />
@@ -431,12 +535,44 @@ export default function App() {
                 <span style={{ color: '#14B8A6' }}>Location-based</span> prayer times adjusted for your current location, plus an <span style={{ color: '#14B8A6' }}>integrated</span> Qibla finder to ensure you're always facing the right direction.
               </p>
               
-              <p 
-                className="text-[15px] md:text-[15px] sm:text-[14px] text-[#666666]"
-                style={{ fontWeight: 400 }}
-              >
-                Location-based Prayer Times • Qibla Finder • Daily Notifications
-              </p>
+              <div className="flex flex-wrap gap-3">
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Location-based Prayer Times</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Qibla Finder</span>
+                </div>
+                <div
+                  className="px-3 py-1.5 rounded-xl"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+                    backdropFilter: 'blur(24px) saturate(200%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                  }}
+                >
+                  <span className="text-[14px] text-[#CCCCCC]" style={{ fontWeight: 400 }}>Daily Notifications</span>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -492,7 +628,7 @@ export default function App() {
             viewport={{ once: true, amount: 0.7 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-              Join the waiting list and start discovering <span style={{ color: '#14B8A6' }}>Muslim essentials</span> today.
+              Join the beta testing and start discovering <span style={{ color: '#14B8A6' }}>Muslim essentials</span> today.
           </motion.p>
           
             <motion.a
@@ -503,16 +639,16 @@ export default function App() {
               }}
               className="inline-flex items-center gap-2 px-8 py-4 bg-[#14B8A6] hover:bg-[#0D9488] text-white text-lg font-semibold rounded-full transition-all duration-300 shadow-lg shadow-[#14B8A6]/30 hover:shadow-[#14B8A6]/40 hover:scale-105"
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.7 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.7 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Join the Beta →
             </motion.a>
           </motion.div>
-          
+
           {/* Arabic Blessing */}
           <motion.div
             className="flex items-center justify-center gap-3 mt-12"
@@ -544,7 +680,7 @@ export default function App() {
                   <circle cx="15" cy="15" r="4" />
                 </g>
               </svg>
-          </motion.div>
+            </motion.div>
         </div>
       </section>
 
@@ -558,51 +694,29 @@ export default function App() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            {/* Left: Navigation Links */}
-            <div className="flex flex-wrap justify-center gap-6">
-              <a
-                href={siteConfig.links.home}
-                className="text-[13px] text-[#666666] hover:text-white transition-colors duration-300"
-                style={{ fontWeight: 400 }}
-              >
-                Home
-              </a>
-              <a
-                href={siteConfig.links.features}
-                className="text-[13px] text-[#666666] hover:text-white transition-colors duration-300"
-                style={{ fontWeight: 400 }}
-              >
-                Features
-              </a>
-              <a
-                href={`mailto:${siteConfig.email.contact}`}
-                className="text-[13px] text-[#666666] hover:text-white transition-colors duration-300"
-                style={{ fontWeight: 400 }}
-              >
-                Contact
-              </a>
-              <a
-                href={siteConfig.links.privacy}
-                className="text-[13px] text-[#666666] hover:text-white transition-colors duration-300"
-                style={{ fontWeight: 400 }}
-              >
-                Privacy
-              </a>
+            {/* Left: Kashf Logo */}
+            <div className="flex items-center gap-2">
+              <img
+                src="/kashf-icon-transparent.png"
+                alt="Kashf"
+                className="w-8 h-8 object-contain"
+              />
+              <span className="text-white text-lg font-semibold tracking-tight">
+                Kashf
+              </span>
             </div>
             
             {/* Right: Social Links and Buy Me a Coffee */}
             <div className="flex items-center gap-4">
-              {siteConfig.social.github && (
-                <a
-                  href={siteConfig.social.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[13px] text-[#666666] hover:text-white hover:bg-[#333333] px-3 py-1.5 rounded-[20px] transition-all duration-300"
-                  style={{ fontWeight: 500 }}
-                >
-                  GitHub
-                </a>
-              )}
+              {siteConfig.social.email && (
+                  <a
+                    href={siteConfig.social.email}
+                    className="text-[13px] text-[#666666] hover:text-white hover:bg-[#333333] px-3 py-1.5 rounded-[20px] transition-all duration-300"
+                    style={{ fontWeight: 500 }}
+                  >
+                    Email
+                  </a>
+                )}
               {siteConfig.social.instagram && (
                 <a
                   href={siteConfig.social.instagram}
